@@ -21,11 +21,9 @@ public class RoundedPanel extends JPanel {
         Graphics2D g2 = (Graphics2D) g.create();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        // fundo plano
         g2.setColor(bgColor);
         g2.fillRoundRect(0, 0, width, height, radius, radius);
 
-        // borda sutil
         g2.setColor(new Color(230, 230, 230));
         g2.setStroke(new BasicStroke(1f));
         g2.drawRoundRect(0, 0, width-1, height-1, radius, radius);

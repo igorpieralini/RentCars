@@ -1,33 +1,61 @@
 package me.pieralini.com.util;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.util.HashMap;
-import java.util.Map;
 import org.yaml.snakeyaml.Yaml;
 
-public class ConfigLoader {
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+public final class ConfigLoader {
+
+    private static final String CONFIG_FILE = "config.yml";
+    private static final String DATABASE_KEY = "database";
+    private static final String TIMEZONE_KEY = "timezone";
+
+
     public static Map<String, String> loadConfig() {
-        Map<String, String> out = new HashMap<>();
-        File cfgFile = new File("config.yml");
-        if (!cfgFile.exists()) {
-            return out;
+        Map<String, String> config = new HashMap<>();
+        File file = new File(CONFIG_FILE);
+
+        if (!file.exists()) {
+            return config;
         }
-        try (FileInputStream fis = new FileInputStream(cfgFile)) {
-            Yaml yaml = new Yaml();
-            Map<String, Object> data = yaml.load(fis);
-            if (data == null) return out;
-            if (data.containsKey("database")) {
-                Object db = data.get("database");
-                if (db instanceof Map) {
-                    Map<?,?> dbMap = (Map<?,?>) db;
-                    dbMap.forEach((k, v) -> out.put(String.valueOf(k), String.valueOf(v)));
-                }
-            }
-            if (data.containsKey("timezone")) {
-                out.put("timezone", String.valueOf(data.get("timezone")));
-            }
-        } catch (Exception ignored) {}
-        return out;
+
+        try (FileInputStream input = new FileInputStream(file)) {
+            Map<String, Object> yamlData = loadYaml(input);
+            if (yamlData == null) return config;
+
+            loadDatabaseConfig(yamlData, config);
+            loadTimezone(yamlData, config);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return config;
+    }
+
+    private static Map<String, Object> loadYaml(FileInputStream input) {
+        return new Yaml().load(input);
+    }
+
+    private static void loadDatabaseConfig(Map<String, Object> yamlData, Map<String, String> config) {
+        Object database = yamlData.get(DATABASE_KEY);
+
+        if (database instanceof Map<?, ?> dbMap) {
+            dbMap.forEach((key, value) ->
+                    config.put(String.valueOf(key), String.valueOf(value))
+            );
+        }
+    }
+
+    private static void loadTimezone(Map<String, Object> yamlData, Map<String, String> config) {
+        Object timezone = yamlData.get(TIMEZONE_KEY);
+
+        if (timezone != null) {
+            config.put(TIMEZONE_KEY, timezone.toString());
+        }
     }
 }

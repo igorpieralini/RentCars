@@ -55,7 +55,7 @@ public class RoundedButton extends JButton {
         int height = getHeight();
 
         int arc = Math.min(12, height / 2);
-        Color base = new Color(0x2196F3); // azul moderno
+        Color base = new Color(0x2196F3);
         Color bg = base;
         if (pressed) {
             bg = base.darker();
@@ -66,7 +66,6 @@ public class RoundedButton extends JButton {
         g2.setColor(bg);
         g2.fillRoundRect(0, 0, width, height, arc, arc);
 
-        // leve overlay para brilho
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.08f));
         g2.setColor(Color.WHITE);
         g2.fillRoundRect(0, 0, width, height / 2, arc, arc);
@@ -87,7 +86,7 @@ public class RoundedButton extends JButton {
 
     @Override
     public void paintBorder(Graphics g) {
-        // no border
+
     }
 
     @Override

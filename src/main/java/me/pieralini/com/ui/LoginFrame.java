@@ -103,7 +103,6 @@ public class LoginFrame extends JFrame {
     private void updateLayout() {
         int width = getWidth();
 
-        // Se a largura for menor que 900px, empilha verticalmente
         if (width < s(900)) {
             if (mainContent.getLayout() instanceof GridLayout) {
                 mainContent.removeAll();
@@ -170,7 +169,6 @@ public class LoginFrame extends JFrame {
         JPanel left = new JPanel(new GridBagLayout());
         left.setBackground(BG_WHITE);
 
-        // Padding adaptativo
         int hPadding = Math.max(s(20), Math.min(s(80), getWidth() / 20));
         int vPadding = s(15);
         left.setBorder(BorderFactory.createEmptyBorder(vPadding, hPadding, vPadding, hPadding));
@@ -179,7 +177,6 @@ public class LoginFrame extends JFrame {
         formContainer.setLayout(new GridBagLayout());
         formContainer.setBorder(BorderFactory.createEmptyBorder(s(14), s(16), s(14), s(16)));
 
-        // Largura máxima adaptativa
         int maxWidth = Math.min(s(400), (int)(getWidth() * 0.4));
         formContainer.setMaximumSize(new Dimension(maxWidth, Integer.MAX_VALUE));
 
@@ -599,10 +596,10 @@ public class LoginFrame extends JFrame {
     }
 
     private void openMainWindow() {
-        JOptionPane.showMessageDialog(this,
-                "Bem-vindo ao AlugaCar!\nAqui será aberta a tela principal.",
-                "Login Bem-sucedido",
-                JOptionPane.INFORMATION_MESSAGE);
+        java.awt.EventQueue.invokeLater(() -> {
+            new me.pieralini.com.ui.view.MainPageFrame(appIcon).setVisible(true);
+            dispose();
+        });
     }
 
     private int s(int v) {

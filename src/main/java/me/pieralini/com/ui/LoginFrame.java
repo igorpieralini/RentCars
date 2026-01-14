@@ -219,7 +219,7 @@ public class LoginFrame extends JFrame {
     }
 
     private void addEmailField(JPanel container, GridBagConstraints gbc) {
-        JLabel emailLabel = new JLabel("E-mail ou telefone");
+        JLabel emailLabel = new JLabel("E-mail");
         emailLabel.setFont(new Font("SansSerif", Font.PLAIN, s(12)));
         emailLabel.setForeground(TEXT_PRIMARY);
         gbc.gridy = 2;
@@ -391,10 +391,7 @@ public class LoginFrame extends JFrame {
                 signupLink.setText("Cadastre-se agora");
             }
             public void mouseClicked(MouseEvent e) {
-                JOptionPane.showMessageDialog(LoginFrame.this,
-                        "Funcionalidade de cadastro em desenvolvimento",
-                        "Cadastrar",
-                        JOptionPane.INFORMATION_MESSAGE);
+                openCadasterWindow();
             }
         });
 
@@ -404,6 +401,14 @@ public class LoginFrame extends JFrame {
         gbc.gridy = 11;
         gbc.insets = new Insets(0, 0, 0, 0);
         container.add(signupPanel, gbc);
+    }
+
+
+    private void openCadasterWindow() {
+        java.awt.EventQueue.invokeLater(() -> {
+            new me.pieralini.com.ui.view.Cadaster(config, appIcon).setVisible(true);
+            dispose();
+        });
     }
 
     private JPanel createRightPanel() {

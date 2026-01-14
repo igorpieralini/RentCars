@@ -23,6 +23,13 @@
             <version>1.33</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.mindrot</groupId>
+            <artifactId>jbcrypt</artifactId>
+            <version>0.4</version>
+        </dependency>
+
+
         <!-- Conector MySQL -->
         <dependency>
             <groupId>mysql</groupId>

@@ -1,56 +1,61 @@
 # AlugaCar
 
-Sistema de aluguel de carros em Java + MySQL, com interface Swing e envio de email para recuperação de senha.
+A **car rental system** built with **Java + MySQL**, featuring a **Swing-based UI** and **email-based password recovery**.
 
 ## 🚀 Quick Start
 
 ```shell
-git clone https://github.com/seu-usuario/AlugaCar.git
+git clone https://github.com/your-username/AlugaCar.git
 cd AlugaCar
 mvn clean install
 ```
 
-Configure o banco de dados:
-- Edite as credenciais em `config.yml` (não versionado)
-- Execute: `java -cp target/AlugaCar-1.0-SNAPSHOT.jar me.pieralini.com.Main`
+### Database Configuration
+
+1. Edit the database credentials in `config.yml` (this file is not versioned).
+2. Run the application:
+
+   ```shell
+   java -cp target/AlugaCar-1.0-SNAPSHOT.jar me.pieralini.com.Main
+   ```
 
 ## 📁 Project Structure
 
+```
 src/
 ├── main/java/me/pieralini/com/
-│   ├── Main.java                # Inicialização
-│   ├── ui/                     # Telas e componentes
-│   │   ├── LoginFrame.java     # Login
-│   │   ├── view/               # Cadastros, página principal
-│   │   ├── systems/            # Recuperação de senha
-│   │   └── components/         # Campos customizados, botões, etc
-│   ├── util/                   # Utilitários
-│   │   ├── Database.java       # Conexão MySQL
-│   │   ├── ConfigLoader.java   # Configuração
-│   │   ├── UIHelper.java       # Auxiliares UI
-│   │   └── email/              # Email
+│   ├── Main.java                # Application entry point
+│   ├── ui/                      # Screens and UI components
+│   │   ├── LoginFrame.java      # Login screen
+│   │   ├── view/                # Registration and main pages
+│   │   ├── systems/             # Password recovery system
+│   │   └── components/          # Custom fields, buttons, etc.
+│   ├── util/                    # Utility classes
+│   │   ├── Database.java        # MySQL connection
+│   │   ├── ConfigLoader.java    # Configuration loader
+│   │   ├── UIHelper.java        # UI helpers
+│   │   └── email/               # Email utilities
 │   │       ├── EmailConfig.java
 │   │       ├── EmailService.java
 │   │       └── EmailTemplate.java
-├── resources/                  # Imagens, configs
+├── resources/                   # Images and configuration files
+```
 
 ## ⚙️ Features
 
-- Autenticação de usuários
-- Cadastro e visualização de carros
-- Cards para exibir carros
-- Recuperação de senha por email
-- Integração com MySQL
-
-## 📊 Database Schema
-
-carros: id, modelo, marca, ano, placa, status
-usuarios: id, nome, email, senha
+* User authentication
+* Car registration and listing
+* Card-based car display
+* Email-based password recovery
+* MySQL database integration
 
 ## 🐛 Dependencies
 
-- mysql-connector-java: conexão MySQL
-- SnakeYAML: arquivos de configuração
-- Jakarta Mail: envio de email
+* **MySQL Connector/J** – MySQL database connection
+* **SnakeYAML** – Configuration file parsing
+* **Jakarta Mail** – Email sending support
 
-## 📏 License: MIT 🔓 | Author: Igor Pieralini
+## 📏 License
+
+MIT License 🔓
+**Author:** Igor Pieralini

@@ -1,6 +1,5 @@
 # Arquivos e pastas ignorados
 config.yml
-LICENSE
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/

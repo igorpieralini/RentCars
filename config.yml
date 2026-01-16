@@ -6,3 +6,11 @@ database:
   port: "3306"
 
 timezone: "UTC"
+
+email:
+  smtpAuth: "true"
+  startTls: "true"
+  host: "smtp.gmail.com"
+  port: "587"
+  username: "sprezzari@gmail.com"
+  password: "rbgrddroogfioash"

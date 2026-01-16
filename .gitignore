@@ -37,3 +37,7 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+# Ignorar arquivos sensíveis e de licença
+config.yml
+LICENSE

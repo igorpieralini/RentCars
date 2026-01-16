@@ -12,8 +12,8 @@ public final class ConfigLoader {
 
     private static final String CONFIG_FILE = "config.yml";
     private static final String DATABASE_KEY = "database";
+    private static final String EMAIL_KEY = "email";
     private static final String TIMEZONE_KEY = "timezone";
-
 
     public static Map<String, String> loadConfig() {
         Map<String, String> config = new HashMap<>();
@@ -28,6 +28,7 @@ public final class ConfigLoader {
             if (yamlData == null) return config;
 
             loadDatabaseConfig(yamlData, config);
+            loadEmailConfig(yamlData, config);
             loadTimezone(yamlData, config);
 
         } catch (IOException e) {
@@ -47,6 +48,16 @@ public final class ConfigLoader {
         if (database instanceof Map<?, ?> dbMap) {
             dbMap.forEach((key, value) ->
                     config.put(String.valueOf(key), String.valueOf(value))
+            );
+        }
+    }
+
+    private static void loadEmailConfig(Map<String, Object> yamlData, Map<String, String> config) {
+        Object email = yamlData.get(EMAIL_KEY);
+
+        if (email instanceof Map<?, ?> emailMap) {
+            emailMap.forEach((key, value) ->
+                    config.put("email." + key, String.valueOf(value))
             );
         }
     }

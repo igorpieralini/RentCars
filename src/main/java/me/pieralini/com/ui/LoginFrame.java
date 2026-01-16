@@ -1,6 +1,7 @@
 package me.pieralini.com.ui;
 
 import me.pieralini.com.ui.components.*;
+import me.pieralini.com.ui.systems.PasswordRecoveryFrame;
 import me.pieralini.com.util.Database;
 import me.pieralini.com.util.UIHelper;
 
@@ -310,10 +311,10 @@ public class LoginFrame extends JFrame {
                 forgotLink.setText("Esqueceu a senha?");
             }
             public void mouseClicked(MouseEvent e) {
-                JOptionPane.showMessageDialog(LoginFrame.this,
-                        "Funcionalidade de recuperação de senha em desenvolvimento",
-                        "Recuperar Senha",
-                        JOptionPane.INFORMATION_MESSAGE);
+                // Abre a tela de recuperação de senha
+                EventQueue.invokeLater(() -> {
+                    new PasswordRecoveryFrame(appIcon);
+                });
             }
         });
 

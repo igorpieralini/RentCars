@@ -22,7 +22,6 @@ public class PasswordRecoveryFrame extends JFrame {
     private static final Color TEXT_PRIMARY = new Color(0, 0, 0);
     private static final Color TEXT_SECONDARY = new Color(96, 96, 96);
     private static final Color BRAND_COLOR = new Color(10, 102, 194);
-    private static final Color ILLUSTRATION_BG = new Color(245, 248, 250);
 
     private final BufferedImage appIcon;
     private double scale;
@@ -51,6 +50,7 @@ public class PasswordRecoveryFrame extends JFrame {
         this.appIcon = icon;
         setupFrame();
         buildUI();
+        setupResponsiveness();
 
         setVisible(true);
     }
@@ -69,8 +69,8 @@ public class PasswordRecoveryFrame extends JFrame {
         this.scale = Math.max(0.75, Math.min(1.25, screen.width / 1366.0));
 
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setSize(s(500), s(600));
-        setMinimumSize(new Dimension(s(450), s(550)));
+        setSize(s(500), s(580));
+        setResizable(false); // Impede redimensionamento
         setLocationRelativeTo(null);
         getContentPane().setBackground(BG_WHITE);
         setLayout(new BorderLayout());
@@ -90,22 +90,26 @@ public class PasswordRecoveryFrame extends JFrame {
         add(createFooter(), BorderLayout.SOUTH);
     }
 
+    private void setupResponsiveness() {
+        // Removido - janela agora tem tamanho fixo
+    }
+
     private JPanel createHeader() {
         JPanel header = new JPanel(new BorderLayout());
         header.setBackground(BG_WHITE);
         header.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(230, 230, 230)),
-                BorderFactory.createEmptyBorder(s(12), s(24), s(12), s(24))
+                BorderFactory.createEmptyBorder(s(10), s(20), s(10), s(20))
         ));
 
-        JPanel logoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, s(10), 0));
+        JPanel logoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, s(8), 0));
         logoPanel.setOpaque(false);
 
-        LogoLabel logo = new LogoLabel(s(28), BRAND_COLOR, scale);
+        LogoLabel logo = new LogoLabel(s(24), BRAND_COLOR, scale);
         logoPanel.add(logo);
 
         JLabel brandName = new JLabel("AlugaCar");
-        brandName.setFont(new Font("SansSerif", Font.BOLD, s(20)));
+        brandName.setFont(new Font("SansSerif", Font.BOLD, s(18)));
         brandName.setForeground(BRAND_COLOR);
         logoPanel.add(brandName);
 
@@ -116,56 +120,57 @@ public class PasswordRecoveryFrame extends JFrame {
     private JPanel createRequestPanel() {
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBackground(BG_WHITE);
-        panel.setBorder(BorderFactory.createEmptyBorder(s(30), s(40), s(30), s(40)));
+        panel.setBorder(BorderFactory.createEmptyBorder(s(20), s(35), s(20), s(35)));
 
-        RoundedPanel formContainer = new RoundedPanel(s(16), BG_WHITE);
+        RoundedPanel formContainer = new RoundedPanel(s(12), BG_WHITE);
         formContainer.setLayout(new GridBagLayout());
-        formContainer.setBorder(BorderFactory.createEmptyBorder(s(20), s(24), s(20), s(24)));
+        formContainer.setBorder(BorderFactory.createEmptyBorder(s(16), s(20), s(16), s(20)));
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.anchor = GridBagConstraints.WEST;
+        gbc.anchor = GridBagConstraints.CENTER;
         gbc.weightx = 1;
 
         // Icon
         JLabel iconLabel = new JLabel("🔒");
-        iconLabel.setFont(new Font("SansSerif", Font.PLAIN, s(48)));
+        iconLabel.setFont(new Font("SansSerif", Font.PLAIN, s(40)));
         iconLabel.setHorizontalAlignment(SwingConstants.CENTER);
         gbc.gridy = 0;
-        gbc.insets = new Insets(0, 0, s(16), 0);
+        gbc.insets = new Insets(0, 0, s(12), 0);
         formContainer.add(iconLabel, gbc);
 
         // Title
         JLabel title = new JLabel("Recuperar Senha");
-        title.setFont(new Font("SansSerif", Font.BOLD, s(24)));
+        title.setFont(new Font("SansSerif", Font.BOLD, s(22)));
         title.setForeground(TEXT_PRIMARY);
         title.setHorizontalAlignment(SwingConstants.CENTER);
         gbc.gridy = 1;
-        gbc.insets = new Insets(0, 0, s(8), 0);
+        gbc.insets = new Insets(0, 0, s(6), 0);
         formContainer.add(title, gbc);
 
         // Subtitle
         JLabel subtitle = new JLabel("<html><center>Informe seu e-mail cadastrado.<br>Enviaremos um código de verificação.</center></html>");
-        subtitle.setFont(new Font("SansSerif", Font.PLAIN, s(12)));
+        subtitle.setFont(new Font("SansSerif", Font.PLAIN, s(11)));
         subtitle.setForeground(TEXT_SECONDARY);
         subtitle.setHorizontalAlignment(SwingConstants.CENTER);
         gbc.gridy = 2;
-        gbc.insets = new Insets(0, 0, s(24), 0);
+        gbc.insets = new Insets(0, 0, s(18), 0);
         formContainer.add(subtitle, gbc);
 
         // Email Label
         JLabel emailLabel = new JLabel("E-mail");
-        emailLabel.setFont(new Font("SansSerif", Font.PLAIN, s(12)));
+        emailLabel.setFont(new Font("SansSerif", Font.PLAIN, s(11)));
         emailLabel.setForeground(TEXT_PRIMARY);
         gbc.gridy = 3;
+        gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(0, 0, s(4), 0);
         formContainer.add(emailLabel, gbc);
 
         // Email Field
         emailField = new HintTextField("Digite seu e-mail cadastrado");
-        emailField.setFont(new Font("SansSerif", Font.PLAIN, s(13)));
-        emailField.setPreferredSize(new Dimension(0, s(38)));
+        emailField.setFont(new Font("SansSerif", Font.PLAIN, s(12)));
+        emailField.setPreferredSize(new Dimension(0, s(36)));
         emailField.setBackground(Color.WHITE);
         emailField.setForeground(TEXT_PRIMARY);
         emailField.setBorder(BorderFactory.createCompoundBorder(
@@ -189,21 +194,21 @@ public class PasswordRecoveryFrame extends JFrame {
         });
 
         gbc.gridy = 4;
-        gbc.insets = new Insets(0, 0, s(12), 0);
+        gbc.insets = new Insets(0, 0, s(10), 0);
         formContainer.add(emailField, gbc);
 
         // Status Label
         requestStatusLabel = new JLabel(" ", SwingConstants.LEFT);
-        requestStatusLabel.setFont(new Font("SansSerif", Font.PLAIN, s(11)));
+        requestStatusLabel.setFont(new Font("SansSerif", Font.PLAIN, s(10)));
         requestStatusLabel.setForeground(new Color(220, 53, 69));
         gbc.gridy = 5;
-        gbc.insets = new Insets(0, 0, s(12), 0);
+        gbc.insets = new Insets(0, 0, s(10), 0);
         formContainer.add(requestStatusLabel, gbc);
 
         // Send Button
         sendTokenButton = new RoundedButton("Enviar Código");
-        sendTokenButton.setPreferredSize(new Dimension(0, s(40)));
-        sendTokenButton.setFont(new Font("SansSerif", Font.BOLD, s(14)));
+        sendTokenButton.setPreferredSize(new Dimension(0, s(38)));
+        sendTokenButton.setFont(new Font("SansSerif", Font.BOLD, s(13)));
         sendTokenButton.setBackground(BRAND_COLOR);
         sendTokenButton.setForeground(Color.WHITE);
         sendTokenButton.addActionListener(e -> requestPasswordReset());
@@ -220,55 +225,56 @@ public class PasswordRecoveryFrame extends JFrame {
     private JPanel createResetPanel() {
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBackground(BG_WHITE);
-        panel.setBorder(BorderFactory.createEmptyBorder(s(30), s(40), s(30), s(40)));
+        panel.setBorder(BorderFactory.createEmptyBorder(s(15), s(35), s(15), s(35)));
 
-        RoundedPanel formContainer = new RoundedPanel(s(16), BG_WHITE);
+        RoundedPanel formContainer = new RoundedPanel(s(12), BG_WHITE);
         formContainer.setLayout(new GridBagLayout());
-        formContainer.setBorder(BorderFactory.createEmptyBorder(s(20), s(24), s(20), s(24)));
+        formContainer.setBorder(BorderFactory.createEmptyBorder(s(14), s(20), s(14), s(20)));
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.anchor = GridBagConstraints.WEST;
+        gbc.anchor = GridBagConstraints.CENTER;
         gbc.weightx = 1;
 
         // Icon
         JLabel iconLabel = new JLabel("✉️");
-        iconLabel.setFont(new Font("SansSerif", Font.PLAIN, s(48)));
+        iconLabel.setFont(new Font("SansSerif", Font.PLAIN, s(40)));
         iconLabel.setHorizontalAlignment(SwingConstants.CENTER);
         gbc.gridy = 0;
-        gbc.insets = new Insets(0, 0, s(16), 0);
+        gbc.insets = new Insets(0, 0, s(10), 0);
         formContainer.add(iconLabel, gbc);
 
         // Title
         JLabel title = new JLabel("Verificar Código");
-        title.setFont(new Font("SansSerif", Font.BOLD, s(24)));
+        title.setFont(new Font("SansSerif", Font.BOLD, s(22)));
         title.setForeground(TEXT_PRIMARY);
         title.setHorizontalAlignment(SwingConstants.CENTER);
         gbc.gridy = 1;
-        gbc.insets = new Insets(0, 0, s(8), 0);
+        gbc.insets = new Insets(0, 0, s(6), 0);
         formContainer.add(title, gbc);
 
         // Subtitle
         JLabel subtitle = new JLabel("<html><center>Digite o código enviado para seu e-mail<br>e escolha uma nova senha.</center></html>");
-        subtitle.setFont(new Font("SansSerif", Font.PLAIN, s(12)));
+        subtitle.setFont(new Font("SansSerif", Font.PLAIN, s(11)));
         subtitle.setForeground(TEXT_SECONDARY);
         subtitle.setHorizontalAlignment(SwingConstants.CENTER);
         gbc.gridy = 2;
-        gbc.insets = new Insets(0, 0, s(24), 0);
+        gbc.insets = new Insets(0, 0, s(16), 0);
         formContainer.add(subtitle, gbc);
 
         // Token Field
         JLabel tokenLabel = new JLabel("Código de Verificação");
-        tokenLabel.setFont(new Font("SansSerif", Font.PLAIN, s(12)));
+        tokenLabel.setFont(new Font("SansSerif", Font.PLAIN, s(11)));
         tokenLabel.setForeground(TEXT_PRIMARY);
         gbc.gridy = 3;
+        gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(0, 0, s(4), 0);
         formContainer.add(tokenLabel, gbc);
 
         tokenField = new HintTextField("Digite o código de 6 dígitos");
-        tokenField.setFont(new Font("SansSerif", Font.PLAIN, s(13)));
-        tokenField.setPreferredSize(new Dimension(0, s(38)));
+        tokenField.setFont(new Font("SansSerif", Font.PLAIN, s(12)));
+        tokenField.setPreferredSize(new Dimension(0, s(36)));
         tokenField.setBackground(Color.WHITE);
         tokenField.setForeground(TEXT_PRIMARY);
         tokenField.setBorder(BorderFactory.createCompoundBorder(
@@ -276,20 +282,20 @@ public class PasswordRecoveryFrame extends JFrame {
                 BorderFactory.createEmptyBorder(s(8), s(10), s(8), s(10))
         ));
         gbc.gridy = 4;
-        gbc.insets = new Insets(0, 0, s(12), 0);
+        gbc.insets = new Insets(0, 0, s(10), 0);
         formContainer.add(tokenField, gbc);
 
         // New Password Field
         JLabel newPassLabel = new JLabel("Nova Senha");
-        newPassLabel.setFont(new Font("SansSerif", Font.PLAIN, s(12)));
+        newPassLabel.setFont(new Font("SansSerif", Font.PLAIN, s(11)));
         newPassLabel.setForeground(TEXT_PRIMARY);
         gbc.gridy = 5;
         gbc.insets = new Insets(0, 0, s(4), 0);
         formContainer.add(newPassLabel, gbc);
 
         newPasswordField = new HintPasswordField("Digite sua nova senha");
-        newPasswordField.setFont(new Font("SansSerif", Font.PLAIN, s(13)));
-        newPasswordField.setPreferredSize(new Dimension(0, s(38)));
+        newPasswordField.setFont(new Font("SansSerif", Font.PLAIN, s(12)));
+        newPasswordField.setPreferredSize(new Dimension(0, s(36)));
         newPasswordField.setBackground(Color.WHITE);
         newPasswordField.setForeground(TEXT_PRIMARY);
         newPasswordField.setBorder(BorderFactory.createCompoundBorder(
@@ -297,20 +303,20 @@ public class PasswordRecoveryFrame extends JFrame {
                 BorderFactory.createEmptyBorder(s(8), s(10), s(8), s(10))
         ));
         gbc.gridy = 6;
-        gbc.insets = new Insets(0, 0, s(12), 0);
+        gbc.insets = new Insets(0, 0, s(10), 0);
         formContainer.add(newPasswordField, gbc);
 
         // Confirm Password Field
         JLabel confirmPassLabel = new JLabel("Confirmar Senha");
-        confirmPassLabel.setFont(new Font("SansSerif", Font.PLAIN, s(12)));
+        confirmPassLabel.setFont(new Font("SansSerif", Font.PLAIN, s(11)));
         confirmPassLabel.setForeground(TEXT_PRIMARY);
         gbc.gridy = 7;
         gbc.insets = new Insets(0, 0, s(4), 0);
         formContainer.add(confirmPassLabel, gbc);
 
         confirmPasswordField = new HintPasswordField("Confirme sua nova senha");
-        confirmPasswordField.setFont(new Font("SansSerif", Font.PLAIN, s(13)));
-        confirmPasswordField.setPreferredSize(new Dimension(0, s(38)));
+        confirmPasswordField.setFont(new Font("SansSerif", Font.PLAIN, s(12)));
+        confirmPasswordField.setPreferredSize(new Dimension(0, s(36)));
         confirmPasswordField.setBackground(Color.WHITE);
         confirmPasswordField.setForeground(TEXT_PRIMARY);
         confirmPasswordField.setBorder(BorderFactory.createCompoundBorder(
@@ -318,21 +324,21 @@ public class PasswordRecoveryFrame extends JFrame {
                 BorderFactory.createEmptyBorder(s(8), s(10), s(8), s(10))
         ));
         gbc.gridy = 8;
-        gbc.insets = new Insets(0, 0, s(12), 0);
+        gbc.insets = new Insets(0, 0, s(10), 0);
         formContainer.add(confirmPasswordField, gbc);
 
         // Status Label
         resetStatusLabel = new JLabel(" ", SwingConstants.LEFT);
-        resetStatusLabel.setFont(new Font("SansSerif", Font.PLAIN, s(11)));
+        resetStatusLabel.setFont(new Font("SansSerif", Font.PLAIN, s(10)));
         resetStatusLabel.setForeground(new Color(220, 53, 69));
         gbc.gridy = 9;
-        gbc.insets = new Insets(0, 0, s(12), 0);
+        gbc.insets = new Insets(0, 0, s(8), 0);
         formContainer.add(resetStatusLabel, gbc);
 
         // Reset Button
         resetButton = new RoundedButton("Redefinir Senha");
-        resetButton.setPreferredSize(new Dimension(0, s(40)));
-        resetButton.setFont(new Font("SansSerif", Font.BOLD, s(14)));
+        resetButton.setPreferredSize(new Dimension(0, s(38)));
+        resetButton.setFont(new Font("SansSerif", Font.BOLD, s(13)));
         resetButton.setBackground(BRAND_COLOR);
         resetButton.setForeground(Color.WHITE);
         resetButton.addActionListener(e -> performPasswordReset());
@@ -349,10 +355,10 @@ public class PasswordRecoveryFrame extends JFrame {
     private JPanel createFooter() {
         JPanel footer = new JPanel(new FlowLayout(FlowLayout.CENTER));
         footer.setBackground(BG_WHITE);
-        footer.setBorder(BorderFactory.createEmptyBorder(s(12), 0, s(16), 0));
+        footer.setBorder(BorderFactory.createEmptyBorder(s(8), 0, s(12), 0));
 
         JLabel backLabel = new JLabel("Voltar para login");
-        backLabel.setFont(new Font("SansSerif", Font.PLAIN, s(12)));
+        backLabel.setFont(new Font("SansSerif", Font.PLAIN, s(11)));
         backLabel.setForeground(BRAND_COLOR);
         backLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         backLabel.addMouseListener(new MouseAdapter() {
@@ -535,7 +541,6 @@ public class PasswordRecoveryFrame extends JFrame {
     }
 
     private void saveTokenToDatabase(String email, String token) throws SQLException {
-        // Expira em 15 minutos
         LocalDateTime expiresAt = LocalDateTime.now().plusMinutes(15);
         String expiresAtStr = expiresAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
@@ -583,11 +588,9 @@ public class PasswordRecoveryFrame extends JFrame {
                     return false;
                 }
 
-                // Atualiza a senha
                 String updateSql = "UPDATE users SET password = ? WHERE email = ?";
                 Database.execute(updateSql, newPassword, email);
 
-                // Marca o token como usado
                 String markUsedSql = "UPDATE password_reset_tokens SET used = true WHERE email = ? AND token = ?";
                 Database.execute(markUsedSql, email, token);
 

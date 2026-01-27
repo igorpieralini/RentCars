@@ -1,6 +1,5 @@
 # Arquivos e pastas ignorados
 config.yml
-target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
@@ -29,4 +28,3 @@ build/
 !**/src/test/**/build/
 .vscode/
 .DS_Store
-

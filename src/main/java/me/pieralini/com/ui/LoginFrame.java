@@ -194,7 +194,6 @@ public class LoginFrame extends JFrame {
         addStatusLabel(formContainer, gbc);
         addLoginButton(formContainer, gbc);
         addDivider(formContainer, gbc);
-        addAlternativeButton(formContainer, gbc);
         addSignupLink(formContainer, gbc);
 
         setupLoginActions();
@@ -349,27 +348,6 @@ public class LoginFrame extends JFrame {
         gbc.gridy = 9;
         gbc.insets = new Insets(0, 0, s(10), 0);
         container.add(divider, gbc);
-    }
-
-    private void addAlternativeButton(JPanel container, GridBagConstraints gbc) {
-        RoundedButton altBtn = new RoundedButton("Entrar com navegador");
-        altBtn.setPreferredSize(new Dimension(0, s(40)));
-        altBtn.setFont(new Font("SansSerif", Font.PLAIN, s(13)));
-        altBtn.setBackground(Color.WHITE);
-        altBtn.setForeground(TEXT_SECONDARY);
-        altBtn.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(200, 200, 200), 1),
-                BorderFactory.createEmptyBorder(s(8), s(12), s(8), s(12))
-        ));
-        altBtn.addActionListener(e -> {
-            JOptionPane.showMessageDialog(this,
-                    "Funcionalidade de login via navegador em desenvolvimento",
-                    "Login Alternativo",
-                    JOptionPane.INFORMATION_MESSAGE);
-        });
-        gbc.gridy = 10;
-        gbc.insets = new Insets(0, 0, s(12), 0);
-        container.add(altBtn, gbc);
     }
 
     private void addSignupLink(JPanel container, GridBagConstraints gbc) {

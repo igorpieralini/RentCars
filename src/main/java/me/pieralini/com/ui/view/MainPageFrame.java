@@ -22,12 +22,13 @@ public class MainPageFrame extends JFrame {
     private static final Color ILLUSTRATION_BG = new Color(245, 248, 250);
     private static final Color ERROR_COLOR = new Color(220, 53, 69);
     private static final Color SUCCESS_COLOR = new Color(40, 167, 69);
-
     private static final Color CARD_BG = Color.WHITE;
     private static final Color CARD_BORDER = new Color(220, 220, 220);
 
     private final BufferedImage appIcon;
     private JPanel cardsPanel;
+    private JPanel searchSection;
+    private boolean searchVisible = false;
 
     public MainPageFrame() {
         this(null);
@@ -35,9 +36,7 @@ public class MainPageFrame extends JFrame {
 
     public MainPageFrame(BufferedImage icon) {
         super("AlugaCar — Encontre seu carro ideal");
-
         this.appIcon = icon;
-
         setupFrame();
         buildUI();
         setupResponsiveness();
@@ -65,8 +64,17 @@ public class MainPageFrame extends JFrame {
     }
 
     private void buildUI() {
+        JPanel headerContainer = new JPanel(new BorderLayout());
+        headerContainer.setBackground(BRAND_COLOR);
+
         JPanel header = createHeader();
-        add(header, BorderLayout.NORTH);
+        headerContainer.add(header, BorderLayout.NORTH);
+
+        searchSection = createSearchSection();
+        searchSection.setVisible(false);
+        headerContainer.add(searchSection, BorderLayout.CENTER);
+
+        add(headerContainer, BorderLayout.NORTH);
 
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBackground(ILLUSTRATION_BG);
@@ -111,15 +119,7 @@ public class MainPageFrame extends JFrame {
 
     private void updateLayout() {
         int width = getWidth();
-
-        int columns;
-        if (width < 800) {
-            columns = 1;
-        } else if (width < 1100) {
-            columns = 1;
-        } else {
-            columns = 2;
-        }
+        int columns = (width < 800 || width < 1100) ? 1 : 2;
 
         GridLayout layout = (GridLayout) cardsPanel.getLayout();
         if (layout.getColumns() != columns) {
@@ -140,34 +140,195 @@ public class MainPageFrame extends JFrame {
         logo.setForeground(Color.WHITE);
         header.add(logo, BorderLayout.WEST);
 
-        JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
-        searchPanel.setOpaque(false);
+        JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 0));
+        buttonsPanel.setOpaque(false);
 
-        JTextField searchField = new JTextField(20);
-        searchField.setFont(new Font("SansSerif", Font.PLAIN, 14));
-        searchField.setPreferredSize(new Dimension(250, 40));
-        searchField.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(200, 200, 200)),
-                new EmptyBorder(8, 12, 8, 12)
-        ));
 
-        JButton searchBtn = new JButton("Buscar");
-        searchBtn.setBackground(BG_WHITE);
-        searchBtn.setForeground(BRAND_COLOR);
-        searchBtn.setFont(new Font("SansSerif", Font.BOLD, 14));
-        searchBtn.setFocusPainted(false);
-        searchBtn.setPreferredSize(new Dimension(90, 40));
-        searchBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        JButton logoutBtn = new JButton("Sair");
+        logoutBtn.setBackground(new Color(220, 53, 69));
+        logoutBtn.setForeground(Color.WHITE);
+        logoutBtn.setFont(new Font("SansSerif", Font.BOLD, 14));
+        logoutBtn.setFocusPainted(false);
+        logoutBtn.setPreferredSize(new Dimension(90, 40));
+        logoutBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        logoutBtn.setBorder(BorderFactory.createEmptyBorder());
 
-        searchPanel.add(searchField);
-        searchPanel.add(searchBtn);
+        logoutBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                logoutBtn.setBackground(new Color(200, 35, 51));
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                logoutBtn.setBackground(new Color(220, 53, 69));
+            }
+        });
 
-        header.add(searchPanel, BorderLayout.EAST);
+        logoutBtn.addActionListener(e -> handleLogout());
+
+        buttonsPanel.add(logoutBtn);
+
+        header.add(buttonsPanel, BorderLayout.EAST);
 
         return header;
     }
 
+
+    private JPanel createSearchSection() {
+        JPanel section = new JPanel(new BorderLayout());
+        section.setBackground(new Color(8, 82, 156));
+        section.setBorder(new EmptyBorder(15, 40, 15, 40));
+
+        JPanel searchContainer = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
+        searchContainer.setOpaque(false);
+
+        JTextField searchField = new JTextField(30);
+        searchField.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        searchField.setPreferredSize(new Dimension(300, 40));
+        searchField.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(200, 200, 200)),
+                new EmptyBorder(8, 12, 8, 12)
+        ));
+        searchField.setToolTipText("Digite o modelo, marca ou ano do carro");
+
+        JButton searchExecuteBtn = new JButton("Buscar");
+        searchExecuteBtn.setBackground(BG_WHITE);
+        searchExecuteBtn.setForeground(BRAND_COLOR);
+        searchExecuteBtn.setFont(new Font("SansSerif", Font.BOLD, 14));
+        searchExecuteBtn.setFocusPainted(false);
+        searchExecuteBtn.setPreferredSize(new Dimension(100, 40));
+        searchExecuteBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        searchExecuteBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                searchExecuteBtn.setBackground(new Color(240, 240, 240));
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                searchExecuteBtn.setBackground(BG_WHITE);
+            }
+        });
+
+        searchExecuteBtn.addActionListener(e -> performSearch(searchField.getText()));
+
+        searchField.addActionListener(e -> performSearch(searchField.getText()));
+
+        JButton clearBtn = new JButton("Limpar");
+        clearBtn.setBackground(new Color(108, 117, 125));
+        clearBtn.setForeground(Color.WHITE);
+        clearBtn.setFont(new Font("SansSerif", Font.BOLD, 14));
+        clearBtn.setFocusPainted(false);
+        clearBtn.setPreferredSize(new Dimension(100, 40));
+        clearBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        clearBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                clearBtn.setBackground(new Color(90, 98, 104));
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                clearBtn.setBackground(new Color(108, 117, 125));
+            }
+        });
+
+        clearBtn.addActionListener(e -> {
+            searchField.setText("");
+            loadCars(cardsPanel);
+        });
+
+        searchContainer.add(searchField);
+        searchContainer.add(searchExecuteBtn);
+        searchContainer.add(clearBtn);
+
+        section.add(searchContainer, BorderLayout.WEST);
+
+        return section;
+    }
+
+    private void toggleSearchSection() {
+        searchVisible = !searchVisible;
+        searchSection.setVisible(searchVisible);
+        revalidate();
+        repaint();
+    }
+
+    private void performSearch(String query) {
+        if (query == null || query.trim().isEmpty()) {
+            loadCars(cardsPanel);
+            return;
+        }
+
+        cardsPanel.removeAll();
+
+        try {
+            String sql = "SELECT c.id, cm.name as model_name, c.year, c.price, c.license_plate, " +
+                    "c.mileage, c.available " +
+                    "FROM cars c " +
+                    "JOIN car_models cm ON c.car_model_id = cm.id " +
+                    "WHERE LOWER(cm.name) LIKE LOWER(?) " +
+                    "OR CAST(c.year AS CHAR) LIKE ? " +
+                    "OR LOWER(c.license_plate) LIKE LOWER(?) " +
+                    "ORDER BY c.available DESC, c.year DESC";
+
+            String searchParam = "%" + query + "%";
+            ResultSet rs = Database.query(sql, searchParam, searchParam, searchParam);
+
+            int count = 0;
+            while (rs.next()) {
+                String fullName = rs.getString("model_name");
+                String brand = "";
+                String model = fullName;
+
+                if (fullName != null && fullName.contains(" ")) {
+                    String[] parts = fullName.split(" ", 2);
+                    brand = parts[0];
+                    model = parts[1];
+                }
+
+                JPanel card = createCarCard(
+                        rs.getInt("id"),
+                        brand,
+                        model,
+                        rs.getInt("year"),
+                        rs.getDouble("price"),
+                        rs.getString("license_plate"),
+                        rs.getInt("mileage"),
+                        rs.getInt("available")
+                );
+                cardsPanel.add(card);
+                count++;
+            }
+
+            if (count == 0) {
+                JLabel emptyLabel = new JLabel("Nenhum carro encontrado para: \"" + query + "\"");
+                emptyLabel.setFont(new Font("SansSerif", Font.PLAIN, 16));
+                emptyLabel.setForeground(TEXT_SECONDARY);
+                emptyLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+                cardsPanel.add(emptyLabel);
+            }
+
+            cardsPanel.revalidate();
+            cardsPanel.repaint();
+
+        } catch (SQLException e) {
+            JLabel errorLabel = new JLabel("Erro ao buscar carros: " + e.getMessage());
+            errorLabel.setForeground(ERROR_COLOR);
+            errorLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+            cardsPanel.add(errorLabel);
+            e.printStackTrace();
+        }
+    }
+
+    private void handleLogout() {
+        LogoutDialog dialog = new LogoutDialog(this);
+        dialog.setVisible(true);
+
+        if (dialog.isConfirmed()) {
+            dispose();
+            // Aqui você abre a tela de login novamente
+            // new LoginFrame().setVisible(true);
+        }
+    }
+
     private void loadCars(JPanel cardsPanel) {
+        cardsPanel.removeAll();
+
         try {
             ResultSet rs = Database.query(
                     "SELECT c.id, cm.name as model_name, c.year, c.price, c.license_plate, " +
